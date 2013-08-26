@@ -97,3 +97,6 @@ mainClass in AssemblyKeys.assembly := Some("com.mlh.stockman.Main")
 assemblySettings
 
 test in AssemblyKeys.assembly := {}
+
+seq(Revolver.settings: _*)
+

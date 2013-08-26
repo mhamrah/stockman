@@ -7,6 +7,8 @@ import spray.can.Http
 trait Web {
   this: Api with CoreActors with Core =>
 
-  IO(Http)(system) ! Http.Bind(rootService, "localhost", port = 9000)
+  import com.mlh.stockman.StockmanConfig.HttpConfig._
+
+  IO(Http)(system) ! Http.Bind(rootService, interface, port = port)
 
 }

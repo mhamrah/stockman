@@ -1,9 +1,8 @@
 package com.mlh.stockman.api
 
 import com.mlh.stockman.core.{CoreActors, Core}
-import akka.actor.Props
+import akka.actor.{ActorRefFactory, Props}
 import spray.routing.RouteConcatenation
-
 /**
  * The REST API layer. It exposes the REST services, but does not provide any
  * web server interface.<br/>
@@ -17,7 +16,8 @@ trait Api extends RouteConcatenation {
 
   val routes =
     new PortfolioRoute().route ~
-    new StockRoute().route
+    new StockRoute().route ~
+    new Site() { override def actorRefFactory: ActorRefFactory = system }.route
 
   val rootService = system.actorOf(Props(new RoutedHttpService(routes)))
 

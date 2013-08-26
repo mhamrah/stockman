@@ -1,5 +1,6 @@
 import sbt._
 import Keys._
+import spray.revolver.RevolverPlugin._
 
 object build extends Build {
 
@@ -14,6 +15,6 @@ object build extends Build {
   lazy val project = Project (
     "project",
     file("."),
-    settings = gcsettings ++ Seq(gcTask)
+    settings = gcsettings ++ Seq(gcTask) ++ Revolver.settings
   )
 }
