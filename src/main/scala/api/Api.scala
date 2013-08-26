@@ -17,6 +17,7 @@ trait Api extends RouteConcatenation {
   val routes =
     new PortfolioRoute().route ~
     new StockRoute().route ~
+    new StatsRoute(system).route ~
     new Site() { override def actorRefFactory: ActorRefFactory = system }.route
 
   val rootService = system.actorOf(Props(new RoutedHttpService(routes)))
