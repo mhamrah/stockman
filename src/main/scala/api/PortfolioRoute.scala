@@ -12,6 +12,9 @@ class PortfolioRoute(implicit executionContext: ExecutionContext)
      get {
        complete("hey")
        //handleWith { sm: SendMessage => messenger ! sm; "{}" }
+     } ~
+     post {
+       complete("hey")
      }
    }
 
