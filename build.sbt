@@ -64,7 +64,7 @@ javacOptions ++= Seq("-Xlint:unchecked", "-Xlint:deprecation")
 
 /* dependencies */
 libraryDependencies ++= Seq (
-  "com.github.nscala-time" %% "nscala-time" % "0.4.2"
+  "com.github.nscala-time" %% "nscala-time" % "0.6.0"
   // -- network --
   //,"net.databinder.dispatch" %% "dispatch-core" % "0.10.1"
   // -- testing --
@@ -73,15 +73,17 @@ libraryDependencies ++= Seq (
   // -- Logging --
   ,"ch.qos.logback" % "logback-classic" % "1.0.13"
   // -- Akka --
-  ,"com.typesafe.akka" %% "akka-testkit" % "2.2.0" % "test"
-  ,"com.typesafe.akka" %% "akka-actor" % "2.2.0"
-  ,"com.typesafe.akka" %% "akka-slf4j" % "2.2.0"
+  ,"com.typesafe.akka" %% "akka-testkit" % "2.2.1" % "test"
+  ,"com.typesafe.akka" %% "akka-actor" % "2.2.1"
+  ,"com.typesafe.akka" %% "akka-slf4j" % "2.2.1"
   // -- Sql --
   //,"com.typesafe.slick" %% "slick" % "1.0.1"
   // -- Spray --
   ,"io.spray" % "spray-routing" % "1.2-20130801"
   ,"io.spray" % "spray-client" % "1.2-20130801"
   ,"io.spray" % "spray-testkit" % "1.2-20130801" % "test"
+  //-- Json --
+  ,"org.json4s" %% "json4s-jackson" % "3.2.5"
 )
 
 /* you may need these repos */
@@ -100,3 +102,4 @@ test in AssemblyKeys.assembly := {}
 
 seq(Revolver.settings: _*)
 
+atmosSettings
