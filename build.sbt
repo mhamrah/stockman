@@ -79,9 +79,9 @@ libraryDependencies ++= Seq (
   // -- Sql --
   //,"com.typesafe.slick" %% "slick" % "1.0.1"
   // -- Spray --
-  ,"io.spray" % "spray-routing" % "1.2-20130801"
-  ,"io.spray" % "spray-client" % "1.2-20130801"
-  ,"io.spray" % "spray-testkit" % "1.2-20130801" % "test"
+  ,"io.spray" % "spray-routing" % "1.2-20130822"
+  ,"io.spray" % "spray-client" % "1.2-20130822"
+  ,"io.spray" % "spray-testkit" % "1.2-20130822" % "test"
   //-- Json --
   ,"org.json4s" %% "json4s-jackson" % "3.2.5"
 )

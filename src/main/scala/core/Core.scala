@@ -15,4 +15,5 @@ trait BootedCore extends Core {
 trait CoreActors {
   this: Core =>
 
+  val portfolio = system.actorOf(Props[PortfolioActor])
 }
