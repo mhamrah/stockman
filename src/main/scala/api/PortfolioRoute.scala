@@ -5,30 +5,33 @@ import akka.util.Timeout
 import akka.pattern.ask
 import scala.concurrent.ExecutionContext
 import spray.routing.Directives
-import spray.httpx.Json4sJacksonSupport
-import org.json4s.Formats
-import org.json4s.DefaultFormats
 import scala.concurrent.duration._
 import spray.http.StatusCodes
-import spray.httpx._
+import spray.httpx.marshalling._
+import spray.json.DefaultJsonProtocol
+import spray.httpx.SprayJsonSupport
+import scala.util._
 
-case class CreatePortfolio(name: String)
+object Json4sProtocol extends DefaultJsonProtocol with SprayJsonSupport {
+  implicit val PortofolioFormats = jsonFormat1(CreatePortfolio)
+}
 
 class PortfolioRoute(portfolio: ActorRef)(implicit executionContext: ExecutionContext)
-  extends Directives with Json4sJacksonSupport {
+  extends Directives {
 
-  implicit def json4sJacksonFormats: Formats = DefaultFormats
-  implicit val timeout: Timeout = 1.second
+  implicit val timeout: Timeout = 5.seconds
+
+  import Json4sProtocol._
 
   val route =
    path("portfolios") {
      post {
        entity(as[CreatePortfolio]) { createPortfolio =>
-          complete {
-            (portfolio ? "boo").map {
-              case _ => "boo"
+         onSuccess(portfolio ? createPortfolio) { portfolioId =>
+                complete {
+                  StatusCodes.Created -> portfolioId.toString // portfolioId
+                }
             }
-          }
        }
        //handleWith { sm: SendMessage => messenger ! sm; "{}" }
      }
