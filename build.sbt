@@ -76,8 +76,6 @@ libraryDependencies ++= Seq (
   ,"com.typesafe.akka" %% "akka-testkit" % "2.2.1" % "test"
   ,"com.typesafe.akka" %% "akka-actor" % "2.2.1"
   ,"com.typesafe.akka" %% "akka-slf4j" % "2.2.1"
-  // -- Sql --
-  //,"com.typesafe.slick" %% "slick" % "1.0.1"
   // -- Spray --
   ,"io.spray" % "spray-routing" % "1.2-20130822"
   ,"io.spray" % "spray-client" % "1.2-20130822"
@@ -85,6 +83,8 @@ libraryDependencies ++= Seq (
   ,"io.spray" % "spray-json_2.10" % "1.2.5"
   //-- Json --
   //,"org.json4s" %% "json4s-native" % "3.2.2"
+  //-- Cassandra --
+  ,"com.datastax.cassandra" % "cassandra-driver-core" % "1.0.3" exclude("org.slf4j", "slf4j-log4j12")
 )
 
 /* you may need these repos */
@@ -104,3 +104,4 @@ test in AssemblyKeys.assembly := {}
 seq(Revolver.settings: _*)
 
 atmosSettings
+

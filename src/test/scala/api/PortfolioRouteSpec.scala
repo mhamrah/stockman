@@ -8,9 +8,9 @@ import akka.testkit.{ TestProbe }
 import spray.httpx.marshalling.Marshaller
 import spray.http._
 import akka.actor.ActorDSL._
-  import HttpMethods._
-    import HttpHeaders._
-    import ContentTypes._
+import HttpMethods._
+import HttpHeaders._
+import ContentTypes._
 
 class PortfolioRouteSpec extends FreeSpec with Matchers  with ScalatestRouteTest {
 
