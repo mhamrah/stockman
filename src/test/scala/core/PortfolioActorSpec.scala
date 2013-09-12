@@ -10,7 +10,6 @@ import com.mlh.stockman.core.PortfolioActor._
 import akka.util.Timeout
 import scala.concurrent.duration._
 
-
 class PortfolioActorSpec extends TestKit(ActorSystem("portfoilio-actor-spec")) with FreeSpecLike with Matchers with ImplicitSender with
 BeforeAndAfterAll {
 
