@@ -13,15 +13,21 @@ import scala.concurrent.duration._
 class PortfolioActorSpec extends TestKit(ActorSystem("portfoilio-actor-spec")) with FreeSpecLike with Matchers with ImplicitSender with
 BeforeAndAfterAll {
 
-  implicit val timeout: Timeout = 5.seconds
-
-  val cluster = new CassandraClusterImpl().cluster
+  val impl = new CassandraClusterImpl()
+  val cluster = impl.cluster
   val pa = system.actorOf(Props(new PortfolioActor(cluster)))
+  
+  override def beforeAll {
+    impl.dropKeyspace
+    impl.ensureKeyspace
+  }
+
+  implicit val timeout: Timeout = 5.seconds
 
   "The Portfolio Actor" - {
     "can create portfolios" in {
       pa ! CreatePortfolio("tester")
-
+      pa ! CreatePortfolio("t2")
       expectMsg("ok")
 
     }
