@@ -72,6 +72,7 @@ libraryDependencies ++= Seq (
   , "org.scalamock" %% "scalamock-scalatest-support" % "3.0.1" % "test"
   // -- Logging --
   ,"ch.qos.logback" % "logback-classic" % "1.0.13"
+  ,"com.typesafe" %% "scalalogging-slf4j" % "1.0.1"
   // -- Akka --
   ,"com.typesafe.akka" %% "akka-testkit" % "2.2.1" % "test"
   ,"com.typesafe.akka" %% "akka-actor" % "2.2.1"
@@ -105,3 +106,9 @@ seq(Revolver.settings: _*)
 
 atmosSettings
 
+testOptions in Test += Tests.Setup(classLoader =>
+  classLoader
+    .loadClass("org.slf4j.LoggerFactory")
+    .getMethod("getLogger", classLoader.loadClass("java.lang.String"))
+    .invoke(null, "ROOT")
+)
