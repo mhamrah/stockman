@@ -78,9 +78,9 @@ libraryDependencies ++= Seq (
   ,"com.typesafe.akka" %% "akka-actor" % "2.2.1"
   ,"com.typesafe.akka" %% "akka-slf4j" % "2.2.1"
   // -- Spray --
-  ,"io.spray" % "spray-routing" % "1.2-20130822"
-  ,"io.spray" % "spray-client" % "1.2-20130822"
-  ,"io.spray" % "spray-testkit" % "1.2-20130822" % "test"
+  ,"io.spray" % "spray-routing" % "1.2-20130912"
+  ,"io.spray" % "spray-client" % "1.2-20130912"
+  ,"io.spray" % "spray-testkit" % "1.2-20130912" % "test"
   ,"io.spray" % "spray-json_2.10" % "1.2.5"
   //-- Json --
   //,"org.json4s" %% "json4s-native" % "3.2.2"

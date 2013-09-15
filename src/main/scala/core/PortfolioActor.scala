@@ -2,25 +2,34 @@ package com.mlh.stockman.core
 
 import akka.actor.{Props, Actor, ActorLogging}
 import java.util.UUID
-import com.datastax.driver.core.{ BoundStatement, Cluster }
+import com.datastax.driver.core.{ BoundStatement, Session }
 import com.mlh.stockman.StockmanConfig.CassandraConfig._
 import scala.collection.JavaConversions._
+import scala.util._ 
 
 object PortfolioActor {
-  case class CreatePortfolio(name: String)
+  case class CreatePortfolio(userId: UUID, name: String)
 }
 
-class PortfolioActor(cluster: Cluster) extends Actor with ActorLogging {
+class PortfolioActor(session: Session) extends Actor with ActorLogging {
   import PortfolioActor._
+  import cassandra.resultset._
+  
+  implicit val executionContext = context.dispatcher
 
-  val session = cluster.connect(db)
-  val preparedStatement = session.prepare("INSERT INTO portfolios(key, name) VALUES (?, ?)")
+  val preparedStatement = session.prepare("INSERT INTO portfolios(userId, portfolioId, name) VALUES (?, ?, ?)")
 
   def receive: Receive = {
-    case CreatePortfolio(name) => {
-      val rsFuture = session.executeAsync(preparedStatement.bind(UUID.randomUUID(), name))
+    case CreatePortfolio(userId, name) => {
+      val portfolioId = UUID.randomUUID();
 
-      sender ! "ok"
+      val rsFuture = session.executeAsync(preparedStatement.bind(userId, portfolioId, name))
+      val originalSender = sender
+      rsFuture map { result => log.info(result.toString); originalSender ! portfolioId }
+      // rsFuture onComplete {
+      //   case Success(result) => originalSender ! portfolioId
+      //   case Failure(ex) => log.error(ex.toString)
+      // }
     }
   }
 }

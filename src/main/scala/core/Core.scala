@@ -15,5 +15,7 @@ trait BootedCore extends Core {
 trait CoreActors {
   this: Core =>
 
-  val portfolio = system.actorOf(Props[PortfolioActor])
+  val cassandra = new CassandraClient()
+  cassandra.ensureKeyspace
+  val portfolio = system.actorOf(Props(classOf[PortfolioActor], cassandra.session), "portfolio")
 }
