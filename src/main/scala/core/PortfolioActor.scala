@@ -29,11 +29,7 @@ class PortfolioActor(session: Session) extends Actor with ActorLogging {
 
       val rsFuture = session.executeAsync(preparedStatement.bind(userId, portfolioId, name))
       val originalSender = sender
-      rsFuture map { result => log.info(result.toString); originalSender ! portfolioId }
-      // rsFuture onComplete {
-      //   case Success(result) => originalSender ! portfolioId
-      //   case Failure(ex) => log.error(ex.toString)
-      // }
+      rsFuture map { result => originalSender ! Portfolio(portfolioId, userId, name) }
     }
     case GetPortfolios(userId) => {
       val q = QueryBuilder

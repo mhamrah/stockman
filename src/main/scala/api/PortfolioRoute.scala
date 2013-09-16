@@ -41,9 +41,9 @@ extends Directives {
     path("portfolios") {
       post {
         entity(as[PortfolioCreate]) { cp =>
-          onSuccess(portfolio ? CreatePortfolio(userId = userId, name = cp.name)) { portfolioId =>
+          onSuccess((portfolio ? CreatePortfolio(userId = userId, name = cp.name)).mapTo[Portfolio]) { portfolio =>
               complete {
-                StatusCodes.Created -> portfolioId.toString // portfolioId
+                StatusCodes.Created -> portfolio
               }
             }
           }

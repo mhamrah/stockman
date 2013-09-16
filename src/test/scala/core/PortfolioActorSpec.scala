@@ -34,8 +34,8 @@ BeforeAndAfterAll {
       pa ! CreatePortfolio(userId, "portfolio1")
       pa ! CreatePortfolio(userId, "portfolio2")
 
-      expectMsgType[java.util.UUID]
-      expectMsgType[java.util.UUID]
+      expectMsgType[Portfolio]
+      expectMsgType[Portfolio]
 
       val q = QueryBuilder
                 .select()

@@ -11,6 +11,7 @@ import akka.actor.ActorDSL._
 import HttpMethods._
 import HttpHeaders._
 import ContentTypes._
+import com.mlh.stockman.core._
 
 class PortfolioRouteSpec extends FreeSpec with Matchers  with ScalatestRouteTest {
 
@@ -19,15 +20,16 @@ class PortfolioRouteSpec extends FreeSpec with Matchers  with ScalatestRouteTest
   "The Portfolio Route" - {
     "when creating Portfolios" - {
       "returns 201 Created when successful" in {
+        val portfolio = Portfolio(java.util.UUID.randomUUID(), java.util.UUID.randomUUID(), "someName")
         val pr = new PortfolioRoute(actor("test")(new Act {
           become {
-            case _ => sender ! "ok"
+            case _ => sender ! portfolio
           }
         }))
 
         Post("/portfolios", PortfolioCreate("someName")) ~> pr.route ~> check {
           status shouldEqual Created
-          entityAs[String] shouldEqual "ok"
+          entityAs[Portfolio] shouldEqual portfolio
         }
       }
     }
