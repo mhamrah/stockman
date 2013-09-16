@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-app>
+<html ng-app="stockman">
   <head>
     <title>Stockman:if expand("%") == ""|browse confirm w|else|confirm w|endif
     </title>
@@ -12,15 +12,22 @@
     <h1>Stockman</h1>
     <div ng-controller="PortfolioCtrl">
       <form ng-submit="addPortfolio()">
-        <input type="text" ng-model="portfolioName" size="30"
-          placeholder="add new Portfolio">
+        <input type="text" ng-model="portfolio.name" size="30"
+          placeholder="Create Portfolio">
         <input class="btn-primary" type="submit" value="add">
       </form>
+
+      <ul id="portfolios">
+        <li ng-repeat="portfolio in portfolios">
+          {{ portfolio.name }}
+        </li>
+      </ul>
     </div>
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="//code.jquery.com/jquery.js"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular-resource.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="js/bootstrap.min.js"></script>
     <script src="js/app/portfolio.js"></script>

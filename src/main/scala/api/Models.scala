@@ -1,3 +1,3 @@
 package com.mlh.stockman.api
 
-case class CreatePortfolio(name: String)
+case class PortfolioCreate(name: String)

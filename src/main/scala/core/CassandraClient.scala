@@ -34,9 +34,10 @@ class CassandraClient extends CassandraCluster with Logging {
 
       session.execute("""
         CREATE TABLE portfolios (
-          userId uuid PRIMARY KEY,
+          userId uuid,
           portfolioId uuid,
-          name text
+          name text,
+          PRIMARY KEY (userId, portfolioId)
         ) WITH COMPACT STORAGE""")
 
     } catch {

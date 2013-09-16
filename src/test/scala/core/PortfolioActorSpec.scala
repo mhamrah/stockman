@@ -9,7 +9,9 @@ import com.mlh.stockman._
 import com.mlh.stockman.core.PortfolioActor._
 import akka.util.Timeout
 import scala.concurrent.duration._
+import com.datastax.driver.core._
 import com.datastax.driver.core.querybuilder._
+import QueryBuilder._
 import scala.collection.JavaConversions._
 
 class PortfolioActorSpec extends TestKit(ActorSystem("portfoilio-actor-spec")) with FreeSpecLike with Matchers with ImplicitSender with
@@ -30,7 +32,9 @@ BeforeAndAfterAll {
       val userId = java.util.UUID.randomUUID()
 
       pa ! CreatePortfolio(userId, "portfolio1")
+      pa ! CreatePortfolio(userId, "portfolio2")
 
+      expectMsgType[java.util.UUID]
       expectMsgType[java.util.UUID]
 
       val q = QueryBuilder
@@ -40,11 +44,24 @@ BeforeAndAfterAll {
                 .where(QueryBuilder.eq("userId", userId))
 
       val result = client.session.execute(q).all()
-      //val result = client.session.execute(s"SELECT * FROM portfolios WHERE userId=${userId}")
 
-      result.size shouldEqual 1
+      result.size shouldEqual 2
       result(0).getUUID("userId") shouldEqual userId
-      result(0).getString("name") shouldEqual "portfolio1"
+    }
+    "can list a user's portfolios" in {
+      val userId = java.util.UUID.randomUUID()
+
+      client.session.execute(s"INSERT INTO portfolios(userId, portfolioId, name) VALUES (${userId}, ${java.util.UUID.randomUUID}, 'portfolio test')")
+
+      pa ! GetPortfolios(userId)
+
+      expectMsgPF() {
+        case a @ Seq(result) => {
+          result.asInstanceOf[Portfolio].name shouldEqual "portfolio test"
+          a.size shouldEqual 1
+        }
+      }
+
     }
   }
 }
