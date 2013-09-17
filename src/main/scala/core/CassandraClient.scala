@@ -4,6 +4,7 @@ import com.datastax.driver.core.{ Cluster, ProtocolOptions, Session }
 import com.datastax.driver.core.exceptions._
 import com.typesafe.scalalogging.slf4j.Logging
 import com.mlh.stockman.StockmanConfig
+import scala.collection.JavaConversions._
 
 trait CassandraCluster {
   def cluster: Cluster
@@ -35,9 +36,8 @@ class CassandraClient extends CassandraCluster with Logging {
       session.execute("""
         CREATE TABLE portfolios (
           userId uuid,
-          portfolioId uuid,
           name text,
-          PRIMARY KEY (userId, portfolioId)
+          PRIMARY KEY (userId, name)
         ) WITH COMPACT STORAGE""")
 
     } catch {
@@ -54,12 +54,12 @@ class CassandraClient extends CassandraCluster with Logging {
     }
   }
 
-  def printInfo = {
-    //val md = cluster.getMetadata
+  def printInfo() = {
+    val md = cluster.getMetadata
 
-    //log.info("Hosts: " + md.getAllHosts.map(h => h.toString).mkString(","))
-    //log.info("Cluster: " + md.getClusterName)
-    //log.info("Keyspaces: " + md.getKeyspaces.map(k => k.getName).mkString(","))
+    logger.info("Hosts: " + md.getAllHosts.map(h => h.toString).mkString(","))
+    logger.info("Cluster: " + md.getClusterName)
+    logger.info("Keyspaces: " + md.getKeyspaces.map(k => k.getName).mkString(","))
   }
 }
 

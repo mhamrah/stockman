@@ -32,10 +32,10 @@ BeforeAndAfterAll {
       val userId = java.util.UUID.randomUUID()
 
       pa ! CreatePortfolio(userId, "portfolio1")
-      pa ! CreatePortfolio(userId, "portfolio2")
+      pa ! CreatePortfolio(userId, "portman")
 
       expectMsgType[Portfolio]
-      expectMsgType[Portfolio]
+      expectMsgType[Portfolio](30 seconds)
 
       val q = QueryBuilder
                 .select()
@@ -51,7 +51,7 @@ BeforeAndAfterAll {
     "can list a user's portfolios" in {
       val userId = java.util.UUID.randomUUID()
 
-      client.session.execute(s"INSERT INTO portfolios(userId, portfolioId, name) VALUES (${userId}, ${java.util.UUID.randomUUID}, 'portfolio test')")
+      client.session.execute(s"INSERT INTO portfolios(userId, name) VALUES (${userId}, 'portfolio test')")
 
       pa ! GetPortfolios(userId)
 

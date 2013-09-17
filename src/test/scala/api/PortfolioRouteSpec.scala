@@ -20,7 +20,7 @@ class PortfolioRouteSpec extends FreeSpec with Matchers  with ScalatestRouteTest
   "The Portfolio Route" - {
     "when creating Portfolios" - {
       "returns 201 Created when successful" in {
-        val portfolio = Portfolio(java.util.UUID.randomUUID(), java.util.UUID.randomUUID(), "someName")
+        val portfolio = Portfolio(java.util.UUID.randomUUID(), "someName")
         val pr = new PortfolioRoute(actor("test")(new Act {
           become {
             case _ => sender ! portfolio

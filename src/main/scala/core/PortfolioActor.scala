@@ -13,7 +13,8 @@ object PortfolioActor {
   case class GetPortfolios(userId: UUID)
 }
 
-case class Portfolio(portfolioId: UUID, userId: UUID, name: String)
+case class Portfolio(userId: UUID, name: String)
+
 
 class PortfolioActor(session: Session) extends Actor with ActorLogging {
   import PortfolioActor._
@@ -21,15 +22,20 @@ class PortfolioActor(session: Session) extends Actor with ActorLogging {
 
   implicit val executionContext = context.dispatcher
 
-  val preparedStatement = session.prepare("INSERT INTO portfolios(userId, portfolioId, name) VALUES (?, ?, ?)")
+  val preparedStatement = session.prepare("INSERT INTO portfolios(userId, name) VALUES (?, ?)")
 
   def receive: Receive = {
     case CreatePortfolio(userId, name) => {
       val portfolioId = UUID.randomUUID();
 
-      val rsFuture = session.executeAsync(preparedStatement.bind(userId, portfolioId, name))
+      val rsFuture = session.executeAsync(preparedStatement.bind(userId, name))
       val originalSender = sender
-      rsFuture map { result => originalSender ! Portfolio(portfolioId, userId, name) }
+      rsFuture onSuccess {
+        case result => originalSender ! Portfolio(userId, name)
+      }
+      rsFuture onFailure {
+        case f => log.error(f.toString)
+      }
     }
     case GetPortfolios(userId) => {
       val q = QueryBuilder
@@ -38,10 +44,9 @@ class PortfolioActor(session: Session) extends Actor with ActorLogging {
               .from("portfolios")
               .where(QueryBuilder.eq("userId", userId))
 
-      val result = session.execute(q).all().map(row => Portfolio(row.getUUID("portfolioId"), row.getUUID("userId"), row.getString("name")))
+      val result = session.execute(q).all().map(row => Portfolio(row.getUUID("userId"), row.getString("name")))
 
       sender ! result
-
     }
   }
 }
