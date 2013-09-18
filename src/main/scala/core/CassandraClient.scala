@@ -23,7 +23,7 @@ class CassandraClient extends CassandraCluster with Logging {
   lazy val cluster: Cluster =
     Cluster.builder().
     addContactPoints(hosts).
-    withPort(port).
+    //withPort(port).
     withoutMetrics().
     withCompression(ProtocolOptions.Compression.SNAPPY).
     build()
@@ -31,14 +31,14 @@ class CassandraClient extends CassandraCluster with Logging {
   def ensureKeyspace = {
 
     try {
-      clusterSession.execute(s"""CREATE KEYSPACE ${db} WITH REPLICATION = { 'class' : 'SimpleStrategy', 'replication_factor' : '3' }""")
+      clusterSession.execute(s"""CREATE KEYSPACE IF NOT EXISTS ${db} WITH REPLICATION = { 'class' : 'SimpleStrategy', 'replication_factor' : '3' }""")
 
       session.execute("""
         CREATE TABLE portfolios (
           userId uuid,
           name text,
           PRIMARY KEY (userId, name)
-        ) WITH COMPACT STORAGE""")
+        ) WITH REPLICATION = { 'class' : 'SimpleStrategy', 'replication_factor' : 3 }""")
 
     } catch {
       case aee: AlreadyExistsException => println("aee: " + aee)
@@ -48,7 +48,7 @@ class CassandraClient extends CassandraCluster with Logging {
 
   def dropKeyspace = {
     try {
-      session.execute(s"""DROP KEYSPACE ${db}""")
+      session.execute(s"""DROP KEYSPACE IF EXISTS ${db}""")
     } catch {
       case e: Exception => println("ex: " + e)
     }
