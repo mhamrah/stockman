@@ -38,7 +38,7 @@ class CassandraClient extends CassandraCluster with Logging {
           userId uuid,
           name text,
           PRIMARY KEY (userId, name)
-        ) WITH REPLICATION = { 'class' : 'SimpleStrategy', 'replication_factor' : 3 }""")
+        )""")
 
     } catch {
       case aee: AlreadyExistsException => println("aee: " + aee)
