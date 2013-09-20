@@ -1,6 +1,6 @@
 package com.mlh.stockman.core
 
-import akka.actor.{Props, ActorSystem}
+import akka.actor.{ Props, ActorSystem }
 
 trait Core {
   implicit def system: ActorSystem

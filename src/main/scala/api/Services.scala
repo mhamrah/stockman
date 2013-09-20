@@ -3,7 +3,7 @@ package com.mlh.stockman.api
 import spray.http.StatusCodes._
 import spray.http._
 import spray.routing._
-import directives.{CompletionMagnet, RouteDirectives}
+import directives.{ CompletionMagnet, RouteDirectives }
 import spray.util.LoggingContext
 import util.control.NonFatal
 import spray.httpx.marshalling.Marshaller
@@ -39,21 +39,20 @@ trait FailureHandling {
         message = "The server was asked a question that didn't make sense: " + e.getMessage,
         error = NotAcceptable)
 
-    case e: NoSuchElementException => ctx =>
+      case e: NoSuchElementException => ctx =>
       loggedFailureResponse(ctx, e,
         message = "The server is missing some information. Try again in a few moments.",
         error = NotFound)
 
-    case t: Throwable => ctx =>
+      case t: Throwable => ctx =>
       // note that toString here may expose information and cause a security leak, so don't do it.
       loggedFailureResponse(ctx, t)
   }
 
   private def loggedFailureResponse(ctx: RequestContext,
-                                    thrown: Throwable,
-                                    message: String = "The server is having problems.",
-                                    error: StatusCode = InternalServerError)
-                                   (implicit log: LoggingContext): Unit = {
+    thrown: Throwable,
+    message: String = "The server is having problems.",
+    error: StatusCode = InternalServerError)(implicit log: LoggingContext): Unit = {
     log.error(thrown, ctx.request.toString)
     ctx.complete(error, message)
   }
@@ -72,14 +71,12 @@ class RoutedHttpService(route: Route) extends Actor with HttpService {
     case NonFatal(ErrorResponseException(statusCode, entity)) => ctx =>
       ctx.complete(statusCode, entity)
 
-    case NonFatal(e) => ctx =>
+      case NonFatal(e) => ctx =>
       ctx.complete(InternalServerError)
-    }
-
+  }
 
   def receive: Receive =
     runRoute(route)(handler, RejectionHandler.Default, context, RoutingSettings.default, LoggingContext.fromActorRefFactory)
-
 
 }
 
@@ -89,14 +86,14 @@ class RoutedHttpService(route: Route) extends Actor with HttpService {
  */
 trait CrossLocationRouteDirectives extends RouteDirectives {
 
-  implicit def fromObjectCross[T : Marshaller](origin: String)(obj: T) =
+  implicit def fromObjectCross[T: Marshaller](origin: String)(obj: T) =
     new CompletionMagnet {
       def route: StandardRoute = new CompletionRoute(OK,
         RawHeader("Access-Control-Allow-Origin", origin) :: Nil, obj)
     }
 
-  private class CompletionRoute[T : Marshaller](status: StatusCode, headers: List[HttpHeader], obj: T)
-    extends StandardRoute {
+  private class CompletionRoute[T: Marshaller](status: StatusCode, headers: List[HttpHeader], obj: T)
+      extends StandardRoute {
     def apply(ctx: RequestContext): Unit = {
       ctx.complete(status, headers, obj)
     }

@@ -22,11 +22,11 @@ class CassandraClient extends CassandraCluster with Logging {
 
   lazy val cluster: Cluster =
     Cluster.builder().
-    addContactPoints(hosts).
-    withPort(port).
-    withoutMetrics().
-    withCompression(ProtocolOptions.Compression.SNAPPY).
-    build()
+      addContactPoints(hosts).
+      withPort(port).
+      withoutMetrics().
+      withCompression(ProtocolOptions.Compression.SNAPPY).
+      build()
 
   def ensureKeyspace = {
 
@@ -62,7 +62,4 @@ class CassandraClient extends CassandraCluster with Logging {
     logger.info("Keyspaces: " + md.getKeyspaces.map(k => k.getName).mkString(","))
   }
 }
-
-
-
 

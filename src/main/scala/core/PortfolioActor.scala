@@ -1,6 +1,6 @@
 package com.mlh.stockman.core
 
-import akka.actor.{Props, Actor, ActorLogging}
+import akka.actor.{ Props, Actor, ActorLogging }
 import java.util.UUID
 import com.datastax.driver.core.{ BoundStatement, Session, querybuilder }
 import com.mlh.stockman.StockmanConfig.CassandraConfig._
@@ -14,7 +14,6 @@ object PortfolioActor {
 }
 
 case class Portfolio(userId: UUID, name: String)
-
 
 class PortfolioActor(session: Session) extends Actor with ActorLogging {
   import PortfolioActor._
@@ -39,10 +38,10 @@ class PortfolioActor(session: Session) extends Actor with ActorLogging {
     }
     case GetPortfolios(userId) => {
       val q = QueryBuilder
-              .select()
-              .all()
-              .from("portfolios")
-              .where(QueryBuilder.eq("userId", userId))
+        .select()
+        .all()
+        .from("portfolios")
+        .where(QueryBuilder.eq("userId", userId))
 
       val result = session.execute(q).all().map(row => Portfolio(row.getUUID("userId"), row.getString("name")))
 
