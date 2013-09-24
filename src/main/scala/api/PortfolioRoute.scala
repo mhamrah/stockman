@@ -16,20 +16,20 @@ import java.util.UUID
 import spray.json._
 
 object Json4sProtocol extends DefaultJsonProtocol with SprayJsonSupport {
-   implicit object UuidJsonFormat extends JsonFormat[UUID] {
-     def write(x: UUID) = JsString(x toString ())
-     def read(value: JsValue) = value match {
-       case JsString(x) => UUID.fromString(x)
-       case x => deserializationError("Expected UUID as JsString, but got " + x)
-     }
-   }
+  implicit object UuidJsonFormat extends JsonFormat[UUID] {
+    def write(x: UUID) = JsString(x toString ())
+    def read(value: JsValue) = value match {
+      case JsString(x) => UUID.fromString(x)
+      case x => deserializationError("Expected UUID as JsString, but got " + x)
+    }
+  }
 
   implicit val CreatePortofolioFormats = jsonFormat1(PortfolioCreate)
   implicit val PortfolioFormats = jsonFormat2(Portfolio)
 }
 
 class PortfolioRoute(portfolio: ActorRef)(implicit executionContext: ExecutionContext)
-extends Directives {
+    extends Directives {
 
   implicit val timeout: Timeout = 5 seconds
 
@@ -42,17 +42,17 @@ extends Directives {
       post {
         entity(as[PortfolioCreate]) { cp =>
           onSuccess((portfolio ? CreatePortfolio(userId = userId, name = cp.name)).mapTo[Portfolio]) { portfolio =>
-              complete {
-                StatusCodes.Created -> portfolio
-              }
+            complete {
+              StatusCodes.Created -> portfolio
             }
           }
-          //handleWith { sm: SendMessage => messenger ! sm; "{}" }
-      } ~
-      get {
-        complete {
-         (portfolio ? GetPortfolios(userId)).mapTo[Seq[Portfolio]]
         }
-      }
+        //handleWith { sm: SendMessage => messenger ! sm; "{}" }
+      } ~
+        get {
+          complete {
+            (portfolio ? GetPortfolios(userId)).mapTo[Seq[Portfolio]]
+          }
+        }
     }
 }

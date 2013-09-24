@@ -13,8 +13,6 @@ trait CassandraCluster {
 }
 
 class CassandraClient extends CassandraCluster with Logging {
-  //def system: ActorSystem
-
   import StockmanConfig.CassandraConfig._
 
   lazy val clusterSession = cluster.connect()
@@ -22,35 +20,41 @@ class CassandraClient extends CassandraCluster with Logging {
 
   lazy val cluster: Cluster =
     Cluster.builder().
-    addContactPoints(hosts).
-    //withPort(port).
-    withoutMetrics().
-    withCompression(ProtocolOptions.Compression.SNAPPY).
-    build()
+      addContactPoints(hosts).
+      withPort(port).
+      withoutMetrics().
+      withCompression(ProtocolOptions.Compression.SNAPPY).
+      build()
 
+  def initSchema = {
+    ensureKeyspace
+    createSchema
+  }
   def ensureKeyspace = {
-
     try {
       clusterSession.execute(s"""CREATE KEYSPACE IF NOT EXISTS ${db} WITH REPLICATION = { 'class' : 'SimpleStrategy', 'replication_factor' : '3' }""")
-
+    } catch {
+      case aee: AlreadyExistsException => logger.error("aee: " + aee)
+      case e: Exception => logger.error("ex: " + e)
+    }
+  }
+  def createSchema = {
+    try {
       session.execute("""
-        CREATE TABLE portfolios (
+        CREATE TABLE IF NOT EXISTS portfolios (
           userId uuid,
           name text,
           PRIMARY KEY (userId, name)
-        )""")
-
+        ) WITH COMPACT STORAGE""")
     } catch {
-      case aee: AlreadyExistsException => println("aee: " + aee)
-      case e: Exception => println("ex: " + e)
+      case e: Exception => logger.error("ex: " + e)
     }
   }
-
   def dropKeyspace = {
     try {
       session.execute(s"""DROP KEYSPACE IF EXISTS ${db}""")
     } catch {
-      case e: Exception => println("ex: " + e)
+      case e: Exception => logger.error("ex: " + e)
     }
   }
 
@@ -62,7 +66,3 @@ class CassandraClient extends CassandraCluster with Logging {
     logger.info("Keyspaces: " + md.getKeyspaces.map(k => k.getName).mkString(","))
   }
 }
-
-
-
-

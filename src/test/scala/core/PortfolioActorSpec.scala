@@ -22,7 +22,7 @@ BeforeAndAfterAll {
 
   override def beforeAll {
     client.dropKeyspace
-    client.ensureKeyspace
+    client.initSchema
   }
 
   implicit val timeout: Timeout = 5.seconds
