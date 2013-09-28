@@ -27,19 +27,12 @@ class CassandraClient extends CassandraCluster with Logging {
       build()
 
   def initSchema = {
-    ensureKeyspace
     createSchema
   }
-  def ensureKeyspace = {
-    try {
-      clusterSession.execute(s"""CREATE KEYSPACE IF NOT EXISTS ${db} WITH REPLICATION = { 'class' : 'SimpleStrategy', 'replication_factor' : '3' }""")
-    } catch {
-      case aee: AlreadyExistsException => logger.error("aee: " + aee)
-      case e: Exception => logger.error("ex: " + e)
-    }
-  }
+
   def createSchema = {
     try {
+      clusterSession.execute(s"""CREATE KEYSPACE IF NOT EXISTS ${db} WITH REPLICATION = { 'class' : 'SimpleStrategy', 'replication_factor' : '1' }""")
       session.execute("""
         CREATE TABLE IF NOT EXISTS portfolios (
           userId uuid,

@@ -16,7 +16,8 @@ trait CoreActors {
   this: Core =>
 
   val cassandra = new CassandraClient()
-  cassandra.ensureKeyspace
+  cassandra.createSchema
+
 
   val portfolio = system.actorOf(Props(classOf[PortfolioActor], cassandra.session), "portfolio")
 }

@@ -21,7 +21,7 @@ class PortfolioActor(session: Session) extends Actor with ActorLogging {
 
   implicit val executionContext = context.dispatcher
 
-  val preparedStatement = session.prepare("INSERT INTO portfolios(userId, name) VALUES (?, ?) IF NOT EXISTS")
+  val preparedStatement = session.prepare("INSERT INTO portfolios(userId, name) VALUES (?, ?)")
 
   def receive: Receive = {
     case CreatePortfolio(userId, name) => {
