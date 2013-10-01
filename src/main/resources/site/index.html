@@ -8,19 +8,35 @@
 
     </head>
   <body>
-    <h1>Stockman</h1>
-    <div ng-controller="PortfolioCtrl">
-      <form ng-submit="addPortfolio()">
-        <input type="text" ng-model="portfolio.name" size="30"
-          placeholder="Create Portfolio">
-        <input class="btn-primary" type="submit" value="add">
-      </form>
+    <div class="container">
+      <div class="row">
+        <h1>Stockman</h1>
+      </div>
+      <div class="row" ng-controller="PortfolioCtrl">
+        <div class="col-md-9">
+            <h4>My Portfolios</h4>
+            <div class="row" ng-repeat="portfolio in portfolios">
+              <div class="col-md-9">
+                {{ portfolio.name }}
+              </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+          <div class="row">
+              <form ng-submit="addPortfolio()">
+                <input type="text" ng-model="portfolio.name" size="30"
+                  placeholder="Create Portfolio">
+                <input class="btn-primary" type="submit" value="add">
+              </form>
 
-      <ul id="portfolios">
-        <li ng-repeat="portfolio in portfolios">
-          {{ portfolio.name }}
-        </li>
-      </ul>
+              <ul id="portfoliosQuick" class="list-unstyled">
+                <li ng-repeat="portfolio in portfolios">
+                  {{ portfolio.name }}
+                </li>
+              </ul>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->

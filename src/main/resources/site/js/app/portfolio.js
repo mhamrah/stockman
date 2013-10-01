@@ -14,6 +14,7 @@ function PortfolioCtrl($scope, Portfolio) {
     var p = new Portfolio($scope.portfolio);
     p.$save(function(data, status) {
       $scope.portfolios.push(p);
+      $scope.portfolio.name = '';
     });
   };
 }
