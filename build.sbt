@@ -85,7 +85,7 @@ libraryDependencies ++= Seq (
   //-- Json --
   //,"org.json4s" %% "json4s-native" % "3.2.2"
   //-- Cassandra --
-  ,"com.datastax.cassandra" % "cassandra-driver-core" % "1.0.3" exclude("org.slf4j", "slf4j-log4j12")
+  ,"com.datastax.cassandra" % "cassandra-driver-core" % "2.0.0-beta2" exclude("org.slf4j", "slf4j-log4j12")
 )
 
 /* you may need these repos */
