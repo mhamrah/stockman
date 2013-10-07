@@ -11,9 +11,11 @@ import querybuilder.QueryBuilder
 object PortfolioActor {
   case class CreatePortfolio(userId: UUID, name: String)
   case class GetPortfolios(userId: UUID)
+  case class AddTicker(portfolioId: UUID, symbol: String)
 }
 
-case class Portfolio(userId: UUID, name: String)
+case class Portfolio(id: UUID, userId: UUID, name: String)
+case class TickerEntry(id: UUID, portfolioId: UUID, symbol: String)
 
 class PortfolioActor(session: Session) extends Actor with ActorLogging {
   import PortfolioActor._
@@ -21,16 +23,30 @@ class PortfolioActor(session: Session) extends Actor with ActorLogging {
 
   implicit val executionContext = context.dispatcher
 
-  val preparedStatement = session.prepare("INSERT INTO portfolios(userId, name) VALUES (?, ?)")
+  val insertPortfolio = session.prepare("INSERT INTO portfolios(userId, name, id) VALUES (?, ?, ?) if not exists")
+  val insertTicker = session.prepare("INSERT INTO tickers(portfolioId, entryId, ticker) VALUES (?, ?, ?)")
 
   def receive: Receive = {
+    case AddTicker(portfolioId, symbol) => {
+      val entryId = UUID.randomUUID();
+      val originalSender = sender
+
+      val rsFuture = session.executeAsync(insertTicker.bind(portfolioId, entryId, symbol))
+
+      rsFuture onSuccess {
+        case result =>
+          originalSender ! TickerEntry(entryId, portfolioId, symbol)
+      }
+    }
     case CreatePortfolio(userId, name) => {
       val portfolioId = UUID.randomUUID();
 
-      val rsFuture = session.executeAsync(preparedStatement.bind(userId, name))
+      val rsFuture = session.executeAsync(insertPortfolio.bind(userId, name, portfolioId))
       val originalSender = sender
       rsFuture onSuccess {
-        case result => originalSender ! Portfolio(userId, name)
+        case result => {
+          originalSender ! Portfolio(portfolioId, userId, name)
+        }
       }
       rsFuture onFailure {
         case f => log.error(f.toString)
@@ -43,7 +59,7 @@ class PortfolioActor(session: Session) extends Actor with ActorLogging {
         .from("portfolios")
         .where(QueryBuilder.eq("userId", userId))
 
-      val result = session.execute(q).all().map(row => Portfolio(row.getUUID("userId"), row.getString("name")))
+      val result = session.execute(q).all().map(row => Portfolio(row.getUUID("id"), row.getUUID("userId"), row.getString("name")))
 
       sender ! result
     }

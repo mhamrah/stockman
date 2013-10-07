@@ -12,21 +12,23 @@
       <div class="row">
         <h1>Stockman</h1>
       </div>
-      <div class="row" ng-controller="PortfolioCtrl">
+      <div class="row" ng-controller="PortfoliosCtrl">
         <div class="col-md-9">
             <h4>My Portfolios</h4>
             <div class="row" ng-repeat="portfolio in portfolios">
               <div class="col-md-9">
                 {{ portfolio.name }}
+                {{ portfolio.userId }}
+                <input type="text" class="form-control" ng-model="portfolio.name" placeholder="Add Ticker">
+                <button class="btn btn-default">Add</Button>
               </div>
             </div>
         </div>
         <div class="col-md-3">
-          <div class="row">
               <form ng-submit="addPortfolio()">
-                <input type="text" ng-model="portfolio.name" size="30"
+                <input type="text" class="form-control" ng-model="portfolio.name"
                   placeholder="Create Portfolio">
-                <input class="btn-primary" type="submit" value="add">
+                  <button class="btn btn-default">Add</Button>
               </form>
 
               <ul id="portfoliosQuick" class="list-unstyled">
@@ -34,7 +36,6 @@
                   {{ portfolio.name }}
                 </li>
               </ul>
-          </div>
         </div>
       </div>
     </div>

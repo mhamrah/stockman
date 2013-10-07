@@ -12,6 +12,7 @@ import HttpMethods._
 import HttpHeaders._
 import ContentTypes._
 import com.mlh.stockman.core._
+import java.util.UUID._
 
 class PortfolioRouteSpec extends FreeSpec with Matchers  with ScalatestRouteTest {
 
@@ -20,7 +21,7 @@ class PortfolioRouteSpec extends FreeSpec with Matchers  with ScalatestRouteTest
   "The Portfolio Route" - {
     "when creating Portfolios" - {
       "returns 201 Created when successful" in {
-        val portfolio = Portfolio(java.util.UUID.randomUUID(), "someName")
+        val portfolio = Portfolio(randomUUID(), randomUUID(), "someName")
         val pr = new PortfolioRoute(actor("test")(new Act {
           become {
             case _ => sender ! portfolio

@@ -26,19 +26,23 @@ class CassandraClient extends CassandraCluster with Logging {
       withCompression(ProtocolOptions.Compression.SNAPPY).
       build()
 
-  def initSchema = {
-    createSchema
-  }
-
   def createSchema = {
     try {
-      clusterSession.execute(s"""CREATE KEYSPACE IF NOT EXISTS ${db} WITH REPLICATION = { 'class' : 'SimpleStrategy', 'replication_factor' : '1' }""")
+      clusterSession.execute(s"""CREATE KEYSPACE IF NOT EXISTS ${db} WITH REPLICATION = { 'class' : 'SimpleStrategy', 'replication_factor' : '2' }""")
       session.execute("""
         CREATE TABLE IF NOT EXISTS portfolios (
           userId uuid,
           name text,
+          id uuid,
           PRIMARY KEY (userId, name)
-        ) WITH COMPACT STORAGE""")
+        ) """)
+      session.execute("""
+        CREATE TABLE IF NOT EXISTS tickers (
+          portfolioId uuid,
+          entryId uuid,
+          ticker text,
+          PRIMARY KEY ( portfolioId, entryId )
+        ) """)
     } catch {
       case e: Exception => logger.error("ex: " + e)
     }

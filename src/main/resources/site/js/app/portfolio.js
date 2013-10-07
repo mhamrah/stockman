@@ -7,7 +7,7 @@ angular.module('portfolioServices', ['ngResource']).
 
 angular.module('stockman', ['portfolioServices']);
 
-function PortfolioCtrl($scope, Portfolio) {
+function PortfoliosCtrl($scope, Portfolio) {
   $scope.portfolios = Portfolio.query();
   $scope.addPortfolio = function() {
   
@@ -18,3 +18,5 @@ function PortfolioCtrl($scope, Portfolio) {
     });
   };
 }
+
+

@@ -25,7 +25,7 @@ object Json4sProtocol extends DefaultJsonProtocol with SprayJsonSupport {
   }
 
   implicit val CreatePortofolioFormats = jsonFormat1(PortfolioCreate)
-  implicit val PortfolioFormats = jsonFormat2(Portfolio)
+  implicit val PortfolioFormats = jsonFormat3(Portfolio)
 }
 
 class PortfolioRoute(portfolio: ActorRef)(implicit executionContext: ExecutionContext)
