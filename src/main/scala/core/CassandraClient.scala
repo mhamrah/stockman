@@ -44,14 +44,14 @@ class CassandraClient extends CassandraCluster with Logging {
           PRIMARY KEY ( portfolioId, entryId )
         ) """)
     } catch {
-      case e: Exception => logger.error("ex: " + e)
+      case e: Exception => logger.error("Create Schema error: " + e)
     }
   }
   def dropKeyspace = {
     try {
-      session.execute(s"""DROP KEYSPACE IF EXISTS ${db}""")
+      clusterSession.execute(s"""DROP KEYSPACE IF EXISTS ${db}""")
     } catch {
-      case e: Exception => logger.error("ex: " + e)
+      case e: Exception => logger.error("Drop Keyspace error: " + e)
     }
   }
 

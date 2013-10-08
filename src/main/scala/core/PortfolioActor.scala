@@ -17,7 +17,7 @@ object PortfolioActor {
 case class Portfolio(id: UUID, userId: UUID, name: String)
 case class TickerEntry(id: UUID, portfolioId: UUID, symbol: String)
 
-class PortfolioActor(session: Session) extends Actor with ActorLogging {
+class PortfolioActor(session: => Session) extends Actor with ActorLogging {
   import PortfolioActor._
   import cassandra.resultset._
 

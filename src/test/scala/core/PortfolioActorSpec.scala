@@ -18,7 +18,6 @@ class PortfolioActorSpec extends TestKit(ActorSystem("portfoilio-actor-spec")) w
 BeforeAndAfterAll {
 
   val client = new CassandraClient()
-  val pa = system.actorOf(Props(new PortfolioActor(client.session)))
 
   override def beforeAll {
     client.dropKeyspace
@@ -28,8 +27,10 @@ BeforeAndAfterAll {
   implicit val timeout: Timeout = 5.seconds
 
   "The Portfolio Actor" - {
+
     "can create portfolios" in {
       val userId = java.util.UUID.randomUUID()
+      val pa = system.actorOf(Props(new PortfolioActor(client.session)))
 
       pa ! CreatePortfolio(userId, "portfolio1")
       pa ! CreatePortfolio(userId, "portman")
@@ -50,6 +51,7 @@ BeforeAndAfterAll {
     }
     "can list a user's portfolios" in {
       val userId = java.util.UUID.randomUUID()
+      val pa = system.actorOf(Props(new PortfolioActor(client.session)))
 
       client.session.execute(s"INSERT INTO portfolios(userId, name) VALUES (${userId}, 'portfolio test')")
 
