@@ -8,6 +8,10 @@ import com.typesafe.scalalogging.slf4j.Logging
 object StockmanConfig {
   private val config = ConfigFactory.load()
 
+  private lazy val root = config.getConfig("stockman")
+
+  lazy val clusterName = root.getString("cluster.name")
+
   object HttpConfig {
     private val httpConfig = config.getConfig("http")
 
