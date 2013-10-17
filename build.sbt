@@ -68,7 +68,7 @@ libraryDependencies ++= Seq (
   // -- network --
   //,"net.databinder.dispatch" %% "dispatch-core" % "0.10.1"
   // -- testing --
-  , "org.scalatest" % "scalatest_2.10" % "2.0.M6-SNAP36" % "test"
+  , "org.scalatest" % "scalatest_2.10" % "2.0.RC2" % "test"
   , "org.scalamock" %% "scalamock-scalatest-support" % "3.0.1" % "test"
   // -- Logging --
   ,"ch.qos.logback" % "logback-classic" % "1.0.13"
@@ -77,6 +77,7 @@ libraryDependencies ++= Seq (
   ,"com.typesafe.akka" %% "akka-testkit" % "2.2.1" % "test"
   ,"com.typesafe.akka" %% "akka-actor" % "2.2.1"
   ,"com.typesafe.akka" %% "akka-slf4j" % "2.2.1"
+  ,"com.typesafe.akka" %% "akka-cluster" % "2.2.1"
   // -- Spray --
   ,"io.spray" % "spray-routing" % "1.2-20130928"
   ,"io.spray" % "spray-client" % "1.2-20130928"
@@ -88,19 +89,14 @@ libraryDependencies ++= Seq (
   ,"com.datastax.cassandra" % "cassandra-driver-core" % "2.0.0-beta2" exclude("org.slf4j", "slf4j-log4j12")
 )
 
+libraryDependencies += "org.fusesource" % "sigar" % "1.6.4" classifier("native")
+
 /* you may need these repos */
 resolvers ++= Seq(
   // Resolver.sonatypeRepo("snapshots")
   // Resolver.typesafeRepo("releases")
   "spray repo" at "http://nightlies.spray.io"
 )
-
-/* assembly plugin */
-mainClass in AssemblyKeys.assembly := Some("com.mlh.stockman.Main")
-
-assemblySettings
-
-test in AssemblyKeys.assembly := {}
 
 seq(Revolver.settings: _*)
 
