@@ -11,6 +11,7 @@ object StockmanConfig {
   private lazy val root = config.getConfig("stockman")
 
   lazy val clusterName = root.getString("cluster.name")
+  lazy val ip = root.getString("ip")
 
   object HttpConfig {
     private val httpConfig = config.getConfig("http")
