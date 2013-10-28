@@ -95,7 +95,8 @@ libraryDependencies += "org.fusesource" % "sigar" % "1.6.4" classifier("native")
 resolvers ++= Seq(
   // Resolver.sonatypeRepo("snapshots")
   // Resolver.typesafeRepo("releases")
-  "spray repo" at "http://nightlies.spray.io"
+  "spray repo" at "http://nightlies.spray.io",
+  "spray" at "http://repo.spray.io/"
 )
 
 seq(Revolver.settings: _*)
