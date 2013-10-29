@@ -6,4 +6,6 @@ addSbtPlugin("io.spray" % "sbt-revolver" % "0.7.1")
 
 addSbtPlugin("com.typesafe.sbt" % "sbt-multi-jvm" % "0.3.8")
 
+addSbtPlugin("com.typesafe.sbt" % "sbt-native-packager" % "0.6.2")
+
 resolvers += Classpaths.sbtPluginReleases
