@@ -3,7 +3,7 @@ package com.mlh.stockman.api
 import spray.http.StatusCodes._
 import spray.http._
 import spray.routing._
-import directives.{ CompletionMagnet, RouteDirectives }
+import directives.{ RouteDirectives }
 import spray.util.LoggingContext
 import util.control.NonFatal
 import spray.httpx.marshalling.Marshaller
@@ -84,6 +84,7 @@ class RoutedHttpService(route: Route) extends Actor with HttpService {
  * Constructs ``CompletionMagnet``s that set the ``Access-Control-Allow-Origin`` header for modern browsers' AJAX
  * requests on different domains / ports.
  */
+/*
 trait CrossLocationRouteDirectives extends RouteDirectives {
 
   implicit def fromObjectCross[T: Marshaller](origin: String)(obj: T) =
@@ -99,3 +100,4 @@ trait CrossLocationRouteDirectives extends RouteDirectives {
     }
   }
 }
+*/

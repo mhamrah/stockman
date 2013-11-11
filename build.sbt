@@ -17,7 +17,7 @@ scmInfo := Some(
 )
 
 /* scala versions and options */
-scalaVersion := "2.10.2"
+scalaVersion := "2.10.3"
 
 crossScalaVersions := Seq(
 /*  "2.9.3-RC1",
@@ -65,8 +65,6 @@ javacOptions ++= Seq("-Xlint:unchecked", "-Xlint:deprecation")
 /* dependencies */
 libraryDependencies ++= Seq (
   "com.github.nscala-time" %% "nscala-time" % "0.6.0"
-  // -- network --
-  //,"net.databinder.dispatch" %% "dispatch-core" % "0.10.1"
   // -- testing --
   , "org.scalatest" % "scalatest_2.10" % "2.0.RC2" % "test"
   , "org.scalamock" %% "scalamock-scalatest-support" % "3.0.1" % "test"
@@ -74,19 +72,19 @@ libraryDependencies ++= Seq (
   ,"ch.qos.logback" % "logback-classic" % "1.0.13"
   ,"com.typesafe" %% "scalalogging-slf4j" % "1.0.1"
   // -- Akka --
-  ,"com.typesafe.akka" %% "akka-testkit" % "2.2.1" % "test"
-  ,"com.typesafe.akka" %% "akka-actor" % "2.2.1"
-  ,"com.typesafe.akka" %% "akka-slf4j" % "2.2.1"
-  ,"com.typesafe.akka" %% "akka-cluster" % "2.2.1"
+  ,"com.typesafe.akka" %% "akka-testkit" % "2.2.3" % "test"
+  ,"com.typesafe.akka" %% "akka-actor" % "2.2.3"
+  ,"com.typesafe.akka" %% "akka-slf4j" % "2.2.3"
+  ,"com.typesafe.akka" %% "akka-cluster" % "2.2.3"
   // -- Spray --
-  ,"io.spray" % "spray-routing" % "1.2-20130928"
-  ,"io.spray" % "spray-client" % "1.2-20130928"
-  ,"io.spray" % "spray-testkit" % "1.2-20130928" % "test"
+  ,"io.spray" % "spray-routing" % "1.2-RC2"
+  ,"io.spray" % "spray-client" % "1.2-RC2"
+  ,"io.spray" % "spray-testkit" % "1.2-RC2" % "test"
   ,"io.spray" % "spray-json_2.10" % "1.2.5"
   //-- Json --
   //,"org.json4s" %% "json4s-native" % "3.2.2"
   //-- Cassandra --
-  ,"com.datastax.cassandra" % "cassandra-driver-core" % "2.0.0-beta2" exclude("org.slf4j", "slf4j-log4j12")
+  ,"com.datastax.cassandra" % "cassandra-driver-core" % "2.0.0-rc1" exclude("org.slf4j", "slf4j-log4j12")
 )
 
 libraryDependencies += "org.fusesource" % "sigar" % "1.6.4" classifier("native")
