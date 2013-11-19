@@ -62,6 +62,9 @@ scalacOptions <++= scalaVersion map { sv =>
 
 javacOptions ++= Seq("-Xlint:unchecked", "-Xlint:deprecation")
 
+val akka = "2.2.3"
+val spray = "1.2-RC3"
+
 /* dependencies */
 libraryDependencies ++= Seq (
   "com.github.nscala-time" %% "nscala-time" % "0.6.0"
@@ -74,14 +77,14 @@ libraryDependencies ++= Seq (
   ,"ch.qos.logback" % "logback-classic" % "1.0.13"
   ,"com.typesafe" %% "scalalogging-slf4j" % "1.0.1"
   // -- Akka --
-  ,"com.typesafe.akka" %% "akka-testkit" % "2.2.1" % "test"
-  ,"com.typesafe.akka" %% "akka-actor" % "2.2.1"
-  ,"com.typesafe.akka" %% "akka-slf4j" % "2.2.1"
-  ,"com.typesafe.akka" %% "akka-cluster" % "2.2.1"
+  ,"com.typesafe.akka" %% "akka-testkit" % akka % "test"
+  ,"com.typesafe.akka" %% "akka-actor" % akka
+  ,"com.typesafe.akka" %% "akka-slf4j" % akka
+  ,"com.typesafe.akka" %% "akka-cluster" % akka
   // -- Spray --
-  ,"io.spray" % "spray-routing" % "1.2-20130928"
-  ,"io.spray" % "spray-client" % "1.2-20130928"
-  ,"io.spray" % "spray-testkit" % "1.2-20130928" % "test"
+  ,"io.spray" % "spray-routing" % spray
+  ,"io.spray" % "spray-client" % spray
+  ,"io.spray" % "spray-testkit" % spray % "test"
   ,"io.spray" % "spray-json_2.10" % "1.2.5"
   //-- Json --
   //,"org.json4s" %% "json4s-native" % "3.2.2"
@@ -95,7 +98,7 @@ libraryDependencies += "org.fusesource" % "sigar" % "1.6.4" classifier("native")
 resolvers ++= Seq(
   // Resolver.sonatypeRepo("snapshots")
   // Resolver.typesafeRepo("releases")
-  "spray repo" at "http://nightlies.spray.io",
+  //"spray repo" at "http://nightlies.spray.io",
   "spray" at "http://repo.spray.io/"
 )
 

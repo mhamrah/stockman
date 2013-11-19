@@ -19,6 +19,8 @@ object StockmanApp extends App {
     Console.readLine() match {
       case "q" =>
         println("exiting")
+        app.system.shutdown()
+        return
       case _ =>
         println("Illegal Command!")
         commandLoop()
