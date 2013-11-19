@@ -88,6 +88,7 @@ libraryDependencies ++= Seq (
   //,"org.json4s" %% "json4s-native" % "3.2.2"
   //-- Cassandra --
   ,"com.datastax.cassandra" % "cassandra-driver-core" % "2.0.0-rc1" exclude("org.slf4j", "slf4j-log4j12")
+  ,"org.xerial.snappy" % "snappy-java" % "1.0.5"
 )
 
 libraryDependencies += "org.fusesource" % "sigar" % "1.6.4" classifier("native")
