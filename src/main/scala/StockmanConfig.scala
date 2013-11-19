@@ -6,7 +6,7 @@ import com.datastax.driver.core.exceptions._
 import com.typesafe.scalalogging.slf4j.Logging
 
 object StockmanConfig {
-  private val config = ConfigFactory.load()
+  private val config =  ConfigFactory.load()
 
   private lazy val root = config.getConfig("stockman")
 

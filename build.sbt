@@ -17,7 +17,7 @@ scmInfo := Some(
 )
 
 /* scala versions and options */
-scalaVersion := "2.10.2"
+scalaVersion := "2.10.3"
 
 crossScalaVersions := Seq(
 /*  "2.9.3-RC1",
@@ -68,8 +68,6 @@ val spray = "1.2-RC3"
 /* dependencies */
 libraryDependencies ++= Seq (
   "com.github.nscala-time" %% "nscala-time" % "0.6.0"
-  // -- network --
-  //,"net.databinder.dispatch" %% "dispatch-core" % "0.10.1"
   // -- testing --
   , "org.scalatest" % "scalatest_2.10" % "2.0.RC2" % "test"
   , "org.scalamock" %% "scalamock-scalatest-support" % "3.0.1" % "test"
@@ -89,7 +87,7 @@ libraryDependencies ++= Seq (
   //-- Json --
   //,"org.json4s" %% "json4s-native" % "3.2.2"
   //-- Cassandra --
-  ,"com.datastax.cassandra" % "cassandra-driver-core" % "2.0.0-beta2" exclude("org.slf4j", "slf4j-log4j12")
+  ,"com.datastax.cassandra" % "cassandra-driver-core" % "2.0.0-rc1" exclude("org.slf4j", "slf4j-log4j12")
 )
 
 libraryDependencies += "org.fusesource" % "sigar" % "1.6.4" classifier("native")
