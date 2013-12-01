@@ -7,10 +7,7 @@ import scala.annotation.tailrec
 object StockmanApp extends App {
   if (args.nonEmpty) System.setProperty("stockman.ip", args(0))
 
-  class Start extends BootedCore with CoreActors with Api with Web {
-  }
-
-  val app = new Start()
+  val app = new  BootedCore with CoreActors with Api with Web { }
 
   commandLoop()
 
@@ -25,4 +22,5 @@ object StockmanApp extends App {
         println("Illegal Command!")
         commandLoop()
     }
+
 }

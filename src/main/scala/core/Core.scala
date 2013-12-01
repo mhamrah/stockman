@@ -27,5 +27,9 @@ trait CoreActors {
 
   cassandra.createSchema
 
+  system.registerOnTermination({
+    cassandra.cluster.shutdown
+  })
+
   val portfolio = system.actorOf(Props(classOf[PortfolioActor], cassandra.session), "portfolio")
 }

@@ -16,12 +16,13 @@ trait Api extends RouteConcatenation {
   private implicit val _ = system.dispatcher
 
   val routes =
-    new PortfolioRoute(portfolio).route ~
+      new PortfolioRoute(portfolio).route ~
       new StockRoute().route ~
       new StatsRoute(system).route ~
       new Site() { override def actorRefFactory: ActorRefFactory = system }.route
 
   val rootService = system.actorOf(Props(new RoutedHttpService(routes)).withRouter(new RoundRobinRouter(5)))
+
 
 }
 
