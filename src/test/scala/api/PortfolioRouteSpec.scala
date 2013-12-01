@@ -30,7 +30,7 @@ class PortfolioRouteSpec extends FreeSpec with Matchers  with ScalatestRouteTest
 
         Post("/portfolios", PortfolioCreate("someName")) ~> pr.route ~> check {
           status shouldEqual Created
-          entityAs[Portfolio] shouldEqual portfolio
+          responseAs[Portfolio] shouldEqual portfolio
         }
       }
     }

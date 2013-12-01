@@ -1,0 +1,31 @@
+<configuration>
+
+  <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+        <!-- See http://logback.qos.ch/manual/layouts.html -->
+        <pattern>%date{HH:mm:ss} %highlight(%-5level) [%.15thread] [%-15lo] - %highlight(%msg%n)</pattern>
+      </encoder>
+  </appender>
+  <!--
+  <logger name="akka.event.slf4j.Slf4jLogger" level="warn" additivity="false">
+    <appender-ref ref="console" />
+  </logger>
+
+  <logger name="com.mlh.stockman" level="debug" additivity="false">
+    <appender-ref ref="console" />
+  </logger>
+
+  <logger name="akka" level="info" additivity="false">
+    <appender-ref ref="console" />
+  </logger>
+-->
+  <logger name="akka.event.slf4j" level="error" />
+  <logger name="com.datastax" level="error" />
+
+  <root level="info">
+    <appender-ref ref="console"/>
+  </root>
+
+</configuration>
+
+

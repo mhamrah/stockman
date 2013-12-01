@@ -8,25 +8,10 @@ import spray.routing.Directives
 import scala.concurrent.duration._
 import spray.http.StatusCodes
 import spray.httpx.marshalling._
-import spray.json.DefaultJsonProtocol
-import spray.httpx.SprayJsonSupport
 import scala.util._
 import com.mlh.stockman.core._
 import java.util.UUID
-import spray.json._
 
-object Json4sProtocol extends DefaultJsonProtocol with SprayJsonSupport {
-  implicit object UuidJsonFormat extends JsonFormat[UUID] {
-    def write(x: UUID) = JsString(x toString ())
-    def read(value: JsValue) = value match {
-      case JsString(x) => UUID.fromString(x)
-      case x => deserializationError("Expected UUID as JsString, but got " + x)
-    }
-  }
-
-  implicit val CreatePortofolioFormats = jsonFormat1(PortfolioCreate)
-  implicit val PortfolioFormats = jsonFormat3(Portfolio)
-}
 
 class PortfolioRoute(portfolio: ActorRef)(implicit executionContext: ExecutionContext)
     extends Directives {
