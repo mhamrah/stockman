@@ -11,7 +11,7 @@ import querybuilder.QueryBuilder
 object PortfolioActor {
   case class CreatePortfolio(userId: UUID, name: String)
   case class GetPortfolios(userId: UUID)
-  case class AddTicker(portfolioId: UUID, symbol: String)
+  case class AddStock(portfolioId: UUID, symbol: String)
 }
 
 class PortfolioActor(session: Session) extends Actor with ActorLogging {
@@ -21,20 +21,19 @@ class PortfolioActor(session: Session) extends Actor with ActorLogging {
   implicit val executionContext = context.dispatcher
 
   val insertPortfolio = session.prepare("INSERT INTO portfolios(userId, name, id) VALUES (?, ?, ?) if not exists")
-  val insertTicker = session.prepare("INSERT INTO tickers(portfolioId, entryId, symbol) VALUES (?, ?, ?)")
+  val insertStock = session.prepare("INSERT INTO stocks(portfolioId, entryId, symbol) VALUES (?, ?, ?)")
 
   def receive: Receive = {
-    case AddTicker(portfolioId, symbol) => {
+    case AddStock(portfolioId, symbol) => {
       val entryId = UUID.randomUUID();
-      val originalSender = sender
+      val rsFuture = session.executeAsync(insertStock.bind(portfolioId, entryId, symbol))
 
-      val rsFuture = session.executeAsync(insertTicker.bind(portfolioId, entryId, symbol))
-
-      sender ! rsFuture.map { result => TickerEntry(entryId, portfolioId, symbol) }
+      sender ! rsFuture.map { result =>
+        StockEntry(entryId, portfolioId, symbol)
+      }
     }
     case CreatePortfolio(userId, name) => {
       val portfolioId = UUID.randomUUID();
-
       val rsFuture = session.executeAsync(insertPortfolio.bind(userId, name, portfolioId))
 
       sender ! rsFuture.map { result => Portfolio(portfolioId, userId, name) }

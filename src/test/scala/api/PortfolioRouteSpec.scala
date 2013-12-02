@@ -13,6 +13,7 @@ import HttpHeaders._
 import ContentTypes._
 import com.mlh.stockman.core._
 import java.util.UUID._
+import scala.concurrent.duration._
 
 class PortfolioRouteSpec extends FreeSpec with Matchers with ScalatestRouteTest {
 
@@ -23,10 +24,11 @@ class PortfolioRouteSpec extends FreeSpec with Matchers with ScalatestRouteTest 
       become {
         case CreatePortfolio(userId, name) => sender ! portfolio.copy(name = name)
         case GetPortfolios(userId) => sender ! Seq(portfolio.copy(name = "p1"), portfolio.copy(name = "p2"))
+        case AddStock(portfolioId, symbol) => sender ! StockEntry(portfolioId, randomUUID(), symbol)
       }
     }))
 
-  "The Portfolio Route" - {
+  "The Portfolios Route" - {
     "post portfolios/" - {
       "returns 201 Created when successful" in {
         Post("/portfolios", PortfolioCreate("yabba zabba")) ~> pr.route ~> check {
@@ -40,6 +42,15 @@ class PortfolioRouteSpec extends FreeSpec with Matchers with ScalatestRouteTest 
         Get("/portfolios") ~> pr.route ~> check {
           status shouldEqual OK
           responseAs[Seq[Portfolio]].length shouldEqual 2
+        }
+      }
+    }
+    "post portfolios/:id/stocks" - {
+      "can add a stock to a portfolio" in {
+        implicit val timeout = 10.seconds
+        Post(s"/portfolios/${portfolio.id}/stocks", Stock("AMAZ")) ~> pr.route ~> check {
+          status shouldEqual Created
+          responseAs[StockEntry].id.toString.length shouldEqual 36
         }
       }
     }

@@ -69,21 +69,21 @@ BeforeAndAfterAll {
         }
       }
     }
-    "can add a ticker entry to a user's portfolio" in {
+    "can add a stock entry to a user's portfolio" in {
       val portfolioId = java.util.UUID.randomUUID()
       val pa = system.actorOf(Props(new PortfolioActor(client.session)))
 
-      pa ! AddTicker(portfolioId, "AMAZ")
-      pa ! AddTicker(portfolioId, "GOOG")
+      pa ! AddStock(portfolioId, "AMAZ")
+      pa ! AddStock(portfolioId, "GOOG")
 
-      val t1 = expectMsgType[Future[TickerEntry]]
+      val t1 = expectMsgType[Future[StockEntry]]
       val r1 = Await.result(t1, 30 seconds)
       r1.symbol shouldEqual "AMAZ"
 
       val q = QueryBuilder
         .select()
         .all()
-        .from("tickers")
+        .from("stocks")
         .where(QueryBuilder.eq("portfolioId", portfolioId))
         //.orderBy(QueryBuilder.asc("ticker"))
 

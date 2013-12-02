@@ -22,7 +22,7 @@ class PortfoliosRoute(portfolio: ActorRef)(implicit executionContext: ExecutionC
 
   val userId = UUID.fromString("3d9cf4eb-4561-488f-984d-2a32a9f49e5e")
   val route =
-    path("portfolios") {
+    pathPrefix("portfolios") {
       get {
           complete {
             (portfolio ? GetPortfolios(userId)).mapTo[Seq[Portfolio]]
@@ -34,6 +34,15 @@ class PortfoliosRoute(portfolio: ActorRef)(implicit executionContext: ExecutionC
               StatusCodes.Created -> (portfolio ? CreatePortfolio(userId = userId, name = cp.name)).mapTo[Portfolio]
             }
         }
+      } ~
+      path(JavaUUID / "stocks") { portfolioId =>
+        post {
+          entity(as[Stock]) { stockEntry =>
+            complete {
+              StatusCodes.Created -> (portfolio ? AddStock(java.util.UUID.randomUUID, "AMAZ")).mapTo[StockEntry]
+            }
+          }
+        }
       }
-   }
+    }
 }

@@ -18,6 +18,8 @@ package object api {
 
     implicit val CreatePortofolioFormats = jsonFormat1(PortfolioCreate)
     implicit val PortfolioFormats = jsonFormat3(Portfolio)
+    implicit val StockFormats = jsonFormat1(Stock)
+    implicit val StockEntryFormats = jsonFormat3(StockEntry)
   }
 
 }

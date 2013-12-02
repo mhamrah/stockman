@@ -37,7 +37,7 @@ class CassandraClient extends CassandraCluster with Logging {
           PRIMARY KEY (userId, name)
         ) """)
       session.execute("""
-        CREATE TABLE IF NOT EXISTS tickers (
+        CREATE TABLE IF NOT EXISTS stocks (
           portfolioId uuid,
           entryId uuid,
           symbol text,
