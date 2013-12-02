@@ -19,27 +19,18 @@ class PortfolioRouteSpec extends FreeSpec with Matchers with ScalatestRouteTest 
   import Json4sProtocol._
     val portfolio = Portfolio(randomUUID(), randomUUID(), "changeMe")
     val pr = new PortfoliosRoute(actor("test")(new Act {
-      import PortfolioActor._
       become {
-        case CreatePortfolio(userId, name) => sender ! portfolio.copy(name = name)
-        case GetPortfolios(userId) => sender ! Seq(portfolio.copy(name = "p1"), portfolio.copy(name = "p2"))
+        case c @ PortfolioCreate(name) => sender ! portfolio.copy(name = c.name)
       }
     }))
 
   "The Portfolio Route" - {
-    "post portfolios/" - {
+    "when creating Portfolios" - {
       "returns 201 Created when successful" in {
+
         Post("/portfolios", PortfolioCreate("yabba zabba")) ~> pr.route ~> check {
           status shouldEqual Created
-          responseAs[Portfolio].name shouldEqual "yabba zabba"
-        }
-      }
-    }
-    "get portfolios/" - {
-      "returns a list of Portfolios" in {
-        Get("/portfolios") ~> pr.route ~> check {
-          status shouldEqual OK
-          responseAs[Seq[Portfolio]].length shouldEqual 2
+          responseAs[Portfolio].name shouldEqual portfolio
         }
       }
     }

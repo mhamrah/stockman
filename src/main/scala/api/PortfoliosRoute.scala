@@ -12,8 +12,7 @@ import scala.util._
 import com.mlh.stockman.core._
 import java.util.UUID
 
-
-class PortfolioRoute(portfolio: ActorRef)(implicit executionContext: ExecutionContext)
+class PortfoliosRoute(portfolio: ActorRef)(implicit executionContext: ExecutionContext)
     extends Directives {
 
   implicit val timeout: Timeout = 5 seconds
@@ -24,20 +23,17 @@ class PortfolioRoute(portfolio: ActorRef)(implicit executionContext: ExecutionCo
   val userId = UUID.fromString("3d9cf4eb-4561-488f-984d-2a32a9f49e5e")
   val route =
     path("portfolios") {
-      post {
-        entity(as[PortfolioCreate]) { cp =>
-          onSuccess((portfolio ? CreatePortfolio(userId = userId, name = cp.name)).mapTo[Portfolio]) { portfolio =>
-            complete {
-              StatusCodes.Created -> portfolio
-            }
-          }
-        }
-        //handleWith { sm: SendMessage => messenger ! sm; "{}" }
-      } ~
-        get {
+      get {
           complete {
             (portfolio ? GetPortfolios(userId)).mapTo[Seq[Portfolio]]
           }
+      } ~
+      post {
+        entity(as[PortfolioCreate]) { cp =>
+            complete {
+              StatusCodes.Created -> (portfolio ? CreatePortfolio(userId = userId, name = cp.name)).mapTo[Portfolio]
+            }
         }
-    }
+      }
+   }
 }

@@ -26,12 +26,12 @@ class StatsRoute(actorRefFactory: ActorRefFactory)(implicit executionContext: Ex
   implicit val statsMarshaller: Marshaller[Stats] =
     Marshaller.delegate[Stats, String](ContentTypes.`text/plain`) { stats =>
       "Uptime                : " + stats.uptime.formatHMS + '\n' +
-        "Total requests        : " + stats.totalRequests + '\n' +
-        "Open requests         : " + stats.openRequests + '\n' +
-        "Max open requests     : " + stats.maxOpenRequests + '\n' + 2
+      "Total requests        : " + stats.totalRequests + '\n' +
+      "Open requests         : " + stats.openRequests + '\n' +
+      "Max open requests     : " + stats.maxOpenRequests + '\n' + 2
       "Total connections     : " + stats.totalConnections + '\n' +
-        "Open connections      : " + stats.openConnections + '\n' +
-        "Max open connections  : " + stats.maxOpenConnections + '\n' +
-        "Requests timed out    : " + stats.requestTimeouts + '\n'
+      "Open connections      : " + stats.openConnections + '\n' +
+      "Max open connections  : " + stats.maxOpenConnections + '\n' +
+      "Requests timed out    : " + stats.requestTimeouts + '\n'
     }
 }

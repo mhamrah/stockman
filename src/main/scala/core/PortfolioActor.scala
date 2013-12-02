@@ -21,7 +21,7 @@ class PortfolioActor(session: Session) extends Actor with ActorLogging {
   implicit val executionContext = context.dispatcher
 
   val insertPortfolio = session.prepare("INSERT INTO portfolios(userId, name, id) VALUES (?, ?, ?) if not exists")
-  val insertTicker = session.prepare("INSERT INTO tickers(portfolioId, entryId, ticker) VALUES (?, ?, ?)")
+  val insertTicker = session.prepare("INSERT INTO tickers(portfolioId, entryId, symbol) VALUES (?, ?, ?)")
 
   def receive: Receive = {
     case AddTicker(portfolioId, symbol) => {
@@ -30,24 +30,15 @@ class PortfolioActor(session: Session) extends Actor with ActorLogging {
 
       val rsFuture = session.executeAsync(insertTicker.bind(portfolioId, entryId, symbol))
 
-      rsFuture onSuccess {
-        case result =>
-          originalSender ! TickerEntry(entryId, portfolioId, symbol)
-      }
+      sender ! rsFuture.map { result => TickerEntry(entryId, portfolioId, symbol) }
     }
     case CreatePortfolio(userId, name) => {
       val portfolioId = UUID.randomUUID();
 
       val rsFuture = session.executeAsync(insertPortfolio.bind(userId, name, portfolioId))
-      val originalSender = sender
-      rsFuture onSuccess {
-        case result => {
-          originalSender ! Portfolio(portfolioId, userId, name)
-        }
-      }
-      rsFuture onFailure {
-        case f => log.error(f.toString)
-      }
+
+      sender ! rsFuture.map { result => Portfolio(portfolioId, userId, name) }
+
     }
     case GetPortfolios(userId) => {
       val q = QueryBuilder

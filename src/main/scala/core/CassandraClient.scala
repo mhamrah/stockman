@@ -40,7 +40,7 @@ class CassandraClient extends CassandraCluster with Logging {
         CREATE TABLE IF NOT EXISTS tickers (
           portfolioId uuid,
           entryId uuid,
-          ticker text,
+          symbol text,
           PRIMARY KEY ( portfolioId, entryId )
         ) """)
     } catch {

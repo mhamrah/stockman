@@ -13,6 +13,7 @@ import com.datastax.driver.core._
 import com.datastax.driver.core.querybuilder._
 import QueryBuilder._
 import scala.collection.JavaConversions._
+import scala.concurrent._
 
 class PortfolioActorSpec extends TestKit(ActorSystem("portfoilio-actor-spec")) with FreeSpecLike with Matchers with ImplicitSender with
 BeforeAndAfterAll {
@@ -35,8 +36,12 @@ BeforeAndAfterAll {
       pa ! CreatePortfolio(userId, "portfolio1")
       pa ! CreatePortfolio(userId, "portman")
 
-      expectMsgType[Portfolio]
-      expectMsgType[Portfolio](30 seconds)
+
+      val p1 = expectMsgType[Future[Portfolio]]
+      val r1 = Await.result(p1, 30 seconds)
+      r1.name shouldEqual "portfolio1"
+
+      expectMsgType[Future[Portfolio]](30 seconds)
 
       val q = QueryBuilder
                 .select()
@@ -63,6 +68,31 @@ BeforeAndAfterAll {
           a.size shouldEqual 1
         }
       }
+    }
+    "can add a ticker entry to a user's portfolio" in {
+      val portfolioId = java.util.UUID.randomUUID()
+      val pa = system.actorOf(Props(new PortfolioActor(client.session)))
+
+      pa ! AddTicker(portfolioId, "AMAZ")
+      pa ! AddTicker(portfolioId, "GOOG")
+
+      val t1 = expectMsgType[Future[TickerEntry]]
+      val r1 = Await.result(t1, 30 seconds)
+      r1.symbol shouldEqual "AMAZ"
+
+      val q = QueryBuilder
+        .select()
+        .all()
+        .from("tickers")
+        .where(QueryBuilder.eq("portfolioId", portfolioId))
+        //.orderBy(QueryBuilder.asc("ticker"))
+
+     val result = client.session.execute(q).all()
+
+     result.size shouldEqual 2
+
+     result.map(r => r.getString("symbol")) should contain("GOOG")
+     result.map(r => r.getString("symbol")) should contain("AMAZ")
 
     }
   }
