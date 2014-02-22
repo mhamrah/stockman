@@ -69,11 +69,11 @@ val spray = "1.2.0"
 libraryDependencies ++= Seq (
   "com.github.nscala-time" %% "nscala-time" % "0.6.0"
   // -- testing --
-  , "org.scalatest" % "scalatest_2.10" % "2.0.RC2" % "test"
-  , "org.scalamock" %% "scalamock-scalatest-support" % "3.0.1" % "test"
+  , "org.scalatest" % "scalatest_2.10" % "2.1.0-RC2" % "test"
+  , "org.scalamock" %% "scalamock-scalatest-support" % "3.1.RC1" % "test"
   // -- Logging --
   ,"ch.qos.logback" % "logback-classic" % "1.0.13"
-  ,"com.typesafe" %% "scalalogging-slf4j" % "1.0.1"
+  ,"com.typesafe" %% "scalalogging-slf4j" % "1.1.0"
   // -- Akka --
   ,"com.typesafe.akka" %% "akka-testkit" % akka % "test"
   ,"com.typesafe.akka" %% "akka-actor" % akka
@@ -87,7 +87,7 @@ libraryDependencies ++= Seq (
   //-- Json --
   //,"org.json4s" %% "json4s-native" % "3.2.2"
   //-- Cassandra --
-  ,"com.datastax.cassandra" % "cassandra-driver-core" % "2.0.0-rc1" exclude("org.slf4j", "slf4j-log4j12")
+  ,"com.datastax.cassandra" % "cassandra-driver-core" % "2.0.0-rc3" exclude("org.slf4j", "slf4j-log4j12")
   ,"org.xerial.snappy" % "snappy-java" % "1.0.5"
 )
 
