@@ -31,7 +31,7 @@ class PortfoliosRoute(portfolio: ActorRef)(implicit executionContext: ExecutionC
       post {
         entity(as[PortfolioCreate]) { cp =>
             complete {
-              StatusCodes.Created -> (portfolio ? CreatePortfolio(userId = userId, name = cp.name)).mapTo[Portfolio]
+              StatusCodes.Created -> (portfolio ? CreatePortfolio(userId = userId, name = cp.name))//.mapTo[Portfolio]
             }
         }
       } ~

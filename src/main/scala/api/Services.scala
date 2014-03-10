@@ -67,37 +67,7 @@ class RoutedHttpService(route: Route) extends Actor with HttpService {
 
   implicit def actorRefFactory = context
 
-  implicit val handler = ExceptionHandler {
-    case NonFatal(ErrorResponseException(statusCode, entity)) => ctx =>
-      ctx.complete(statusCode, entity)
-
-      case NonFatal(e) => ctx =>
-      ctx.complete(InternalServerError)
-  }
-
   def receive: Receive =
-    runRoute(route)(handler, RejectionHandler.Default, context, RoutingSettings.default, LoggingContext.fromActorRefFactory)
+    runRoute(route)//(handler, RejectionHandler.Default, context, RoutingSettings.default, LoggingContext.fromActorRefFactory)
 
 }
-
-/**
- * Constructs ``CompletionMagnet``s that set the ``Access-Control-Allow-Origin`` header for modern browsers' AJAX
- * requests on different domains / ports.
- */
-/*trait CrossLocationRouteDirectives extends RouteDirectives {
-
-  implicit def fromObjectCross[T: Marshaller](origin: String)(obj: T) =
-    new CompletionMagnet {
-      def route: StandardRoute = new CompletionRoute(OK,
-        RawHeader("Access-Control-Allow-Origin", origin) :: Nil, obj)
-    }
-
-  private class CompletionRoute[T: Marshaller](status: StatusCode, headers: List[HttpHeader], obj: T)
-      extends StandardRoute {
-    def apply(ctx: RequestContext): Unit = {
-      ctx.complete(status, headers, obj)
-    }
-  }
-
-}
-*/

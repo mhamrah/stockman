@@ -23,10 +23,14 @@ class PortfolioActor(session: Session) extends Actor with ActorLogging {
   val insertPortfolio = session.prepare("INSERT INTO portfolios(userId, name, id) VALUES (?, ?, ?) if not exists")
   val insertStock = session.prepare("INSERT INTO stocks(portfolioId, entryId, symbol) VALUES (?, ?, ?)")
 
+  log.info("startup")
+
   def receive: Receive = {
     case AddStock(portfolioId, symbol) => {
       val entryId = UUID.randomUUID();
       val rsFuture = session.executeAsync(insertStock.bind(portfolioId, entryId, symbol))
+
+      log.info("boot!")
 
       sender ! rsFuture.map { result =>
         StockEntry(entryId, portfolioId, symbol)
@@ -36,7 +40,8 @@ class PortfolioActor(session: Session) extends Actor with ActorLogging {
       val portfolioId = UUID.randomUUID();
       val rsFuture = session.executeAsync(insertPortfolio.bind(userId, name, portfolioId))
 
-      sender ! rsFuture.map { result => Portfolio(portfolioId, userId, name) }
+      log.info("zzz")
+      rsFuture.map { result => log.info("yyy"); Portfolio(portfolioId, userId, name) }
 
     }
     case GetPortfolios(userId) => {

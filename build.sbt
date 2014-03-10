@@ -62,17 +62,17 @@ scalacOptions <++= scalaVersion map { sv =>
 
 javacOptions ++= Seq("-Xlint:unchecked", "-Xlint:deprecation")
 
-val akka = "2.2.3"
-val spray = "1.2.0"
+val akka = "2.3.0"
+val spray = "1.3.0"
 
 /* dependencies */
 libraryDependencies ++= Seq (
-  "com.github.nscala-time" %% "nscala-time" % "0.6.0"
+  "com.github.nscala-time" %% "nscala-time" % "0.8.0"
   // -- testing --
   , "org.scalatest" % "scalatest_2.10" % "2.1.0-RC2" % "test"
   , "org.scalamock" %% "scalamock-scalatest-support" % "3.1.RC1" % "test"
   // -- Logging --
-  ,"ch.qos.logback" % "logback-classic" % "1.0.13"
+  ,"ch.qos.logback" % "logback-classic" % "1.1.1"
   ,"com.typesafe" %% "scalalogging-slf4j" % "1.1.0"
   // -- Akka --
   ,"com.typesafe.akka" %% "akka-testkit" % akka % "test"
@@ -83,12 +83,12 @@ libraryDependencies ++= Seq (
   ,"io.spray" % "spray-routing" % spray
   ,"io.spray" % "spray-client" % spray
   ,"io.spray" % "spray-testkit" % spray % "test"
-  ,"io.spray" % "spray-json_2.10" % "1.2.5"
   //-- Json --
-  //,"org.json4s" %% "json4s-native" % "3.2.2"
+  ,"org.json4s" %% "json4s-jackson" % "3.2.7"
   //-- Cassandra --
-  ,"com.datastax.cassandra" % "cassandra-driver-core" % "2.0.0-rc3" exclude("org.slf4j", "slf4j-log4j12")
-  ,"org.xerial.snappy" % "snappy-java" % "1.0.5"
+  ,"com.datastax.cassandra" % "cassandra-driver-core" % "2.0.0" exclude("org.slf4j", "slf4j-log4j12")
+  ,"org.xerial.snappy" % "snappy-java" % "1.1.0.1"
+  ,"net.jpountz.lz4" % "lz4" % "1.2.0"
 )
 
 libraryDependencies += "org.fusesource" % "sigar" % "1.6.4" classifier("native")
@@ -102,8 +102,6 @@ resolvers ++= Seq(
 )
 
 seq(Revolver.settings: _*)
-
-atmosSettings
 
 testOptions in Test += Tests.Setup(classLoader =>
   classLoader

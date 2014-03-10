@@ -3,11 +3,11 @@
   <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
     <encoder>
         <!-- See http://logback.qos.ch/manual/layouts.html -->
-        <pattern>%date{HH:mm:ss} %highlight(%-5level) [%.15thread] [%-15lo] - %highlight(%msg%n)</pattern>
+        <pattern>zzz %date{HH:mm:ss} %highlight(%-5level) [%.15thread] [%-15lo] - %highlight(%msg%n)</pattern>
       </encoder>
   </appender>
 
-  <logger name="akka.event.slf4j.Slf4jLogger" level="warn" additivity="false">
+  <logger name="akka.event.slf4j.Slf4jLogger" level="info" additivity="false">
     <appender-ref ref="console" />
   </logger>
 
@@ -19,7 +19,7 @@
     <appender-ref ref="console" />
   </logger>
 
-  <root level="info">
+  <root level="debug">
     <appender-ref ref="console"/>
   </root>
 
