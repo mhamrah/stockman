@@ -2,7 +2,7 @@ package com.mlh.stockman.core
 
 import com.datastax.driver.core.{ Cluster, ProtocolOptions, Session }
 import com.datastax.driver.core.exceptions._
-import com.typesafe.scalalogging.slf4j.Logging
+import com.typesafe.scalalogging.slf4j._
 import com.mlh.stockman.StockmanConfig
 import scala.collection.JavaConversions._
 
@@ -12,7 +12,7 @@ trait CassandraCluster {
   val session: Session
 }
 
-class CassandraClient extends CassandraCluster with Logging {
+class CassandraClient extends CassandraCluster with StrictLogging {
   import StockmanConfig.CassandraConfig._
 
   lazy val clusterSession = cluster.connect()

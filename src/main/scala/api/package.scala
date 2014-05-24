@@ -1,25 +1,33 @@
 package com.mlh.stockman
 
-import spray.json._
-import spray.json.DefaultJsonProtocol
-import spray.httpx.SprayJsonSupport
+import spray.httpx.Json4sJacksonSupport
 import java.util.UUID
-import com.mlh.stockman.core._
+import org.json4s._
 
 package object api {
-  object Json4sProtocol extends DefaultJsonProtocol with SprayJsonSupport {
-    implicit object UuidJsonFormat extends JsonFormat[UUID] {
-      def write(x: UUID) = JsString(x toString ())
-      def read(value: JsValue) = value match {
-        case JsString(x) => UUID.fromString(x)
-        case x => deserializationError("Expected UUID as JsString, but got " + x)
-      }
+  object Json4sProtocol extends Json4sJacksonSupport {
+  implicit def json4sJacksonFormats: Formats = jackson.Serialization.formats(NoTypeHints) + new UUIDFormat
+
+  val jsonMethods = org.json4s.jackson.JsonMethods
+
+  import jsonMethods._
+
+  class UUIDFormat extends Serializer[UUID] {
+    val UUIDClass = classOf[UUID]
+
+    def deserialize(implicit format: Formats): PartialFunction[(TypeInfo, JValue), UUID] = {
+      case (TypeInfo(UUIDClass, _), JString(x)) => UUID.fromString(x)
     }
 
-    implicit val CreatePortofolioFormats = jsonFormat1(PortfolioCreate)
-    implicit val PortfolioFormats = jsonFormat3(Portfolio)
-    implicit val StockFormats = jsonFormat1(Stock)
-    implicit val StockEntryFormats = jsonFormat3(StockEntry)
+    def serialize(implicit format: Formats): PartialFunction[Any, JValue] = {
+      case x: UUID => JString(x.toString)
+    }
+  }
+
+  def toJValue[T <: AnyRef](value: T): JValue = {
+    import jackson.Serialization._
+    parse(write(value))
+  }
   }
 
 }

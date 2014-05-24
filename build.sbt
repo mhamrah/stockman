@@ -17,7 +17,7 @@ scmInfo := Some(
 )
 
 /* scala versions and options */
-scalaVersion := "2.10.3"
+scalaVersion := "2.11.1"
 
 crossScalaVersions := Seq(
 /*  "2.9.3-RC1",
@@ -62,33 +62,32 @@ scalacOptions <++= scalaVersion map { sv =>
 
 javacOptions ++= Seq("-Xlint:unchecked", "-Xlint:deprecation")
 
-val akka = "2.2.3"
-val spray = "1.2.0"
+val akka = "2.3.3"
+val spray = "1.3.1-20140423"
 
 /* dependencies */
 libraryDependencies ++= Seq (
-  "com.github.nscala-time" %% "nscala-time" % "0.6.0"
+  "com.github.nscala-time" %% "nscala-time" % "1.0.0"
   // -- testing --
-  , "org.scalatest" % "scalatest_2.10" % "2.1.0-RC2" % "test"
-  , "org.scalamock" %% "scalamock-scalatest-support" % "3.1.RC1" % "test"
+  , "org.scalatest" %% "scalatest" % "2.1.7" % "test"
+  //, "org.scalamock" %% "scalamock-scalatest-support" % "3.1.RC1" % "test"
   // -- Logging --
-  ,"ch.qos.logback" % "logback-classic" % "1.0.13"
-  ,"com.typesafe" %% "scalalogging-slf4j" % "1.1.0"
+  ,"ch.qos.logback" % "logback-classic" % "1.1.2"
+  ,"com.typesafe.scala-logging" %% "scala-logging-slf4j" % "2.1.2"
   // -- Akka --
   ,"com.typesafe.akka" %% "akka-testkit" % akka % "test"
   ,"com.typesafe.akka" %% "akka-actor" % akka
   ,"com.typesafe.akka" %% "akka-slf4j" % akka
   ,"com.typesafe.akka" %% "akka-cluster" % akka
   // -- Spray --
-  ,"io.spray" % "spray-routing" % spray
-  ,"io.spray" % "spray-client" % spray
-  ,"io.spray" % "spray-testkit" % spray % "test"
-  ,"io.spray" % "spray-json_2.10" % "1.2.5"
+  ,"io.spray" %% "spray-routing" % spray
+  ,"io.spray" %% "spray-client" % spray
+  ,"io.spray" %% "spray-testkit" % spray % "test"
   //-- Json --
-  //,"org.json4s" %% "json4s-native" % "3.2.2"
+  ,"org.json4s" %% "json4s-jackson" % "3.2.10"
   //-- Cassandra --
-  ,"com.datastax.cassandra" % "cassandra-driver-core" % "2.0.0-rc3" exclude("org.slf4j", "slf4j-log4j12")
-  ,"org.xerial.snappy" % "snappy-java" % "1.0.5"
+  ,"com.datastax.cassandra" % "cassandra-driver-core" % "2.0.2" exclude("org.slf4j", "slf4j-log4j12")
+  ,"org.xerial.snappy" % "snappy-java" % "1.1.0.1"
 )
 
 libraryDependencies += "org.fusesource" % "sigar" % "1.6.4" classifier("native")
@@ -97,13 +96,11 @@ libraryDependencies += "org.fusesource" % "sigar" % "1.6.4" classifier("native")
 resolvers ++= Seq(
   // Resolver.sonatypeRepo("snapshots")
   // Resolver.typesafeRepo("releases")
-  //"spray repo" at "http://nightlies.spray.io",
+  "spray repo" at "http://nightlies.spray.io",
   "spray" at "http://repo.spray.io/"
 )
 
 seq(Revolver.settings: _*)
-
-atmosSettings
 
 testOptions in Test += Tests.Setup(classLoader =>
   classLoader

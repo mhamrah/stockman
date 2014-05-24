@@ -3,7 +3,6 @@ package com.mlh.stockman
 import com.typesafe.config.ConfigFactory
 import com.datastax.driver.core.{ Cluster, ProtocolOptions }
 import com.datastax.driver.core.exceptions._
-import com.typesafe.scalalogging.slf4j.Logging
 
 object StockmanConfig {
   private val config =  ConfigFactory.load()
